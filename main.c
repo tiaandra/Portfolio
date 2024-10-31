@@ -5,10 +5,9 @@
 void main()
 {
     MicroInit();
-    LCDInit();
-    LCDPrintString("Hello");
-    LCDSendCommand(LCDSecondLine);
-    LCDPrintString("Wordl");
+    LCDWriteString("Hello");
+    LCDWriteInstruction(LCDSecondLine);
+    LCDWriteString("World");
     while (1)
     {
     }
@@ -16,5 +15,11 @@ void main()
 
 void MicroInit()
 {
-    DDRC = 1;
-}
+    LCD_D7_DDR |= (1 << LCD_D7_BIT);
+    LCD_D6_DDR |= (1 << LCD_D6_BIT);
+    LCD_D5_DDR |= (1 << LCD_D5_BIT);
+    LCD_D4_DDR |= (1 << LCD_D4_BIT);
+    LCD_EN_DDR |= (1 << LCD_EN_BIT);
+    LCD_RS_DDR |= (1 << LCD_RS_BIT);
+    LCDInit();
+};

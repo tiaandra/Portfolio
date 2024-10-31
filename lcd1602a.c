@@ -2,60 +2,84 @@
 
 void LCDInit()
 {
-	_delay_ms(40);
-	LCDSendCommand(LCDReset);
+	_delay_ms(100); // Power-up delay
+	LCDInstructionInput();
+	LCDEnableLow();
+	LCDWriteNibble(LCDFunctionReset); // Reset sequence
 	_delay_ms(10);
-	LCDSendCommand(LCDReset);
-	_delay_us(150);
-	LCDSendCommand(LCDReset);
+	LCDWriteNibble(LCDFunctionReset); // Reset sequence
 	_delay_us(200);
-	LCDSendCommand(LCDFunctionSet);
-	LCDSendCommand(LCDTurnOff);
-	LCDSendCommand(LCDClearScreen);
-	LCDSendCommand(LCDEntryMode);
-	LCDSendCommand(LCDTurnOn);
-	_delay_ms(2);
+	LCDWriteNibble(LCDFunctionReset); // Reset sequence
+	_delay_us(200);
+	LCDWriteNibble(LCDFunctionSet); // Set 4bit bus mode
+	_delay_us(80);
+	LCDWriteInstruction(LCDFunctionSet); // Set mode, lines and char
+	_delay_us(80);
+	LCDWriteInstruction(LCDTurnOff); // Power up routine
+	_delay_us(80);
+	LCDWriteInstruction(LCDClearScreen); // Power up routine
+	_delay_ms(4);
+	LCDWriteInstruction(LCDEntryMode); // Power up routine
+	_delay_us(80);
+	LCDWriteInstruction(LCDTurnOn); // Initialization finished, display ON
+	_delay_us(80);
 }
 
-void LCDSendCommand(char command)
+void LCDWriteNibble(uint8_t c)
+{
+	(c & 1 << 7) ? LCD_D7_PORT |= (1 << LCD_D7_BIT) : LCD_D7_PORT &= ~(1 << LCD_D7_BIT);
+	(c & 1 << 6) ? LCD_D6_PORT |= (1 << LCD_D6_BIT) : LCD_D6_PORT &= ~(1 << LCD_D6_BIT);
+	(c & 1 << 5) ? LCD_D5_PORT |= (1 << LCD_D5_BIT) : LCD_D5_PORT &= ~(1 << LCD_D5_BIT);
+	(c & 1 << 4) ? LCD_D4_PORT |= (1 << LCD_D4_BIT) : LCD_D4_PORT &= ~(1 << LCD_D4_BIT);
+	LCDEnableHigh();
+	_delay_us(1);
+	LCDEnableLow();
+	_delay_us(1);
+}
+
+void LCDWriteInstruction(uint8_t c)
 {
 	LCDInstructionInput();
-	LCDPrintCharToPin(command);
+	LCDEnableLow();
+	LCDWriteNibble(c);
+	LCDWriteNibble(c << 4);
 }
 
-void LCDPrintCharToPin(char c)
+void LCDEnableLow()
 {
-	LCDWriteData();
-	LCDPort = (LCDPort & 0x0F) | (c & 0xF0);
-	LCDWriteData();
-	LCDPort = (LCDPort & 0x0F) | (c << 4);
-	_delay_ms(2);
+	LCD_EN_PORT &= ~(1 << LCD_EN_BIT);
+}
+
+void LCDEnableHigh()
+{
+	LCD_EN_PORT |= (1 << LCD_EN_BIT);
 }
 
 void LCDInstructionInput()
 {
-	LCDPort &= ~(1 << RS);
-	_delay_ms(2);
+	LCD_RS_PORT &= ~(1 << LCD_RS_BIT);
 }
 
 void LCDDataInput()
 {
-	LCDPort |= (1 << RS);
-	_delay_ms(2);
+	LCD_RS_PORT |= (1 << LCD_RS_BIT);
 }
 
-void LCDWriteData()
-{
-	LCDPort |= (1 << E);
-	_delay_ms(2);
-	LCDPort &= ~(1 << E);
-}
-
-void LCDPrintString(char *string)
+void LCDWriteChar(uint8_t c)
 {
 	LCDDataInput();
-	while (*string != 0)
-		LCDPrintCharToPin(*string++);
+	LCDEnableLow();
+	LCDWriteNibble(c);
+	LCDWriteNibble(c << 4);
+}
+
+void LCDWriteString(uint8_t *c)
+{
+	while (*c != 0)
+	{
+		LCDWriteChar(*c++);
+		_delay_us(80);
+	}
 }
 
 /*	https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-42743-ATmega324P_Datasheet.pdf
