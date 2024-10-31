@@ -10,6 +10,8 @@ void main()
     LCDSendCommand(LCDSecondLine);
     LCDPrintString("Wordl");
     while (1)
+    {
+    }
 }
 
 void MicroInit()
