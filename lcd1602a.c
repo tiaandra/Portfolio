@@ -2,12 +2,17 @@
 
 void LCDInit()
 {
-	LCDPort = 0;
-	_delay_ms(20);
-	LCDSendCommand(0x33);
-	LCDSendCommand(0x32);
+	_delay_ms(40);
+	LCDSendCommand(LCDReset);
+	_delay_ms(10);
+	LCDSendCommand(LCDReset);
+	_delay_us(150);
+	LCDSendCommand(LCDReset);
+	_delay_us(200);
 	LCDSendCommand(LCDFunctionSet);
+	LCDSendCommand(LCDTurnOff);
 	LCDSendCommand(LCDClearScreen);
+	LCDSendCommand(LCDEntryMode);
 	LCDSendCommand(LCDTurnOn);
 	_delay_ms(2);
 }
