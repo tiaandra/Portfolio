@@ -1,35 +1,18 @@
 #include <avr/io.h>
 #include <util/delay.h>
+#define F_CPU 8000000UL
 
-#define LCDClear 0b00000001
-#define LCDReturnHome 0b00000010
-#define LCDSecondLine 0b11000000
-#define LCDResetCursor 0b00000010
-#define LCDCursorRight 0b00010100
-#define LCDCursorLeft 0b00010000
-#define LCDDisplayRight 0b00011100
-#define LCDDisplayLeft 0b00011000
-#define LCDFunctionSet 0b00101000
-#define LCDTurnOn 0b00001111
-#define LCDShift 0b00001110
-
-/*#define D0 PORTC0
-#define D1 PORTC1
-#define D2 PORTC2
-#define D3 PORTC3
-#define D4 PORTC0
-#define D5 PORTC1
-#define D6 PORTC2
-#define D7 PORTC3
-
-#define MaskD0 0b00000001
-#define MaskD1 0b00000010
-#define MaskD2 0b00000100
-#define MaskD3 0b00001000
-#define MaskD4 0b00010000
-#define MaskD5 0b00100000
-#define MaskD6 0b01000000
-#define MaskD7 0b10000000*/
+#define LCDClearScreen 0x01 // Clears screen
+#define LCDReturnHome 0x02
+#define LCDFirstLine 0x80    // Forces cursor to the beginning of 1st line
+#define LCDSecondLine 0xc0   // Forces cursor to the beginning of 2nd line
+#define LCDCursorRight 0x14  // Moves cursor right by one char
+#define LCDCursorLeft 0x10   // Moves cursor left by one char
+#define LCDDisplayRight 0x1c // Moves display right by one char
+#define LCDDisplayLeft 0x18  // Moves display left by one char
+#define LCDFunctionSet 0x28  // Display in 4-bit bus mode, 2 lines and 5x8 dots char
+#define LCDTurnOn 0x0e       // Turns display on with cursor on
+#define LCDShift 0x0e
 
 #define LCDPort PORTC
 
@@ -39,8 +22,7 @@
 void LCDInit();
 void LCDSendCommand(char command);
 void LCDPrintString(char *string);
-// void LCDPrintCharToPin(char c);
-// void LCDSetPin(char c, uint8_t port, uint8_t mask);
+void LCDPrintCharToPin(char c);
 void LCDDataInput();
 void LCDInstructionInput();
-void LCDResetSignal();
+void LCDWriteData();

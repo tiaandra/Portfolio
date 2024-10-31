@@ -2,12 +2,13 @@
 
 void LCDInit()
 {
+	LCDPort = 0;
 	_delay_ms(20);
-	LCDSendCommand(LCDReturnHome);
+	LCDSendCommand(0x33);
+	LCDSendCommand(0x32);
 	LCDSendCommand(LCDFunctionSet);
+	LCDSendCommand(LCDClearScreen);
 	LCDSendCommand(LCDTurnOn);
-	LCDSendCommand(LCDShift);
-	LCDSendCommand(LCDClear);
 	_delay_ms(2);
 }
 
@@ -17,56 +18,32 @@ void LCDSendCommand(char command)
 	LCDPrintCharToPin(command);
 }
 
-/*void LCDPrintCharToPin(char c)
-{
-	LCDResetSignal();
-	LCDSetPin(c, D7, MaskD7);
-	LCDSetPin(c, D6, MaskD6);
-	LCDSetPin(c, D5, MaskD5);
-	LCDSetPin(c, D4, MaskD4);
-	LCDResetSignal();
-	LCDSetPin(c, D3, MaskD3);
-	LCDSetPin(c, D2, MaskD2);
-	LCDSetPin(c, D1, MaskD1);
-	LCDSetPin(c, D0, MaskD0);
-	_delay_ms(1);
-}
-
-void LCDSetPin(char c, uint8_t port, uint8_t mask)
-{
-	if ((c & mask) != 0)
-		PORTC |= (1 << port);
-	else
-		PORTC &= ~(1 << port);
-}*/
-
 void LCDPrintCharToPin(char c)
 {
-	LCDResetSignal();
-	PORTC = (PORTC & 0x0F) | (c & 0xF0);
-	LCDResetSignal();
-	PORTC = (PORTC & 0x0F) | (c << 4);
-	_delay_ms(1);
+	LCDWriteData();
+	LCDPort = (LCDPort & 0x0F) | (c & 0xF0);
+	LCDWriteData();
+	LCDPort = (LCDPort & 0x0F) | (c << 4);
+	_delay_ms(2);
 }
 
 void LCDInstructionInput()
 {
-	PORTC &= ~(1 << RS);
-	_delay_ms(1);
+	LCDPort &= ~(1 << RS);
+	_delay_ms(2);
 }
 
 void LCDDataInput()
 {
-	PORTC |= (1 << RS);
-	_delay_ms(1);
+	LCDPort |= (1 << RS);
+	_delay_ms(2);
 }
 
-void LCDResetSignal()
+void LCDWriteData()
 {
-	PORTC &= ~(1 << E);
-	_delay_ms(1);
-	PORTC |= (1 << E);
-	_delay_ms(1);
+	LCDPort |= (1 << E);
+	_delay_ms(2);
+	LCDPort &= ~(1 << E);
 }
 
 void LCDPrintString(char *string)
