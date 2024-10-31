@@ -2,15 +2,18 @@
 #include <avr/io.h>
 #include "lcd1602a.h"
 
-void main()
+void MicroInit();
+
+int main()
 {
     MicroInit();
-    LCDWriteString("Hello");
+    LCDWriteString("Tiago");
     LCDWriteInstruction(LCDSecondLine);
-    LCDWriteString("World");
+    LCDWriteString("Andrade");
     while (1)
     {
     }
+    return 0;
 }
 
 void MicroInit()

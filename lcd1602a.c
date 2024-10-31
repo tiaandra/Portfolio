@@ -25,19 +25,27 @@ void LCDInit()
 	_delay_us(80);
 }
 
-void LCDWriteNibble(uint8_t c)
+void LCDWriteNibble(char c)
 {
-	(c & 1 << 7) ? LCD_D7_PORT |= (1 << LCD_D7_BIT) : LCD_D7_PORT &= ~(1 << LCD_D7_BIT);
-	(c & 1 << 6) ? LCD_D6_PORT |= (1 << LCD_D6_BIT) : LCD_D6_PORT &= ~(1 << LCD_D6_BIT);
-	(c & 1 << 5) ? LCD_D5_PORT |= (1 << LCD_D5_BIT) : LCD_D5_PORT &= ~(1 << LCD_D5_BIT);
-	(c & 1 << 4) ? LCD_D4_PORT |= (1 << LCD_D4_BIT) : LCD_D4_PORT &= ~(1 << LCD_D4_BIT);
+	LCD_D7_PORT &= ~(1 << LCD_D7_BIT);
+	if (c & 1 << 7)
+		LCD_D7_PORT |= (1 << LCD_D7_BIT);
+	~LCD_D6_PORT &= ~(1 << LCD_D6_BIT);
+	if (c & 1 << 7)
+		LCD_D6_PORT |= (1 << LCD_D6_BIT);
+	LCD_D5_PORT &= ~(1 << LCD_D5_BIT);
+	if (c & 1 << 7)
+		LCD_D5_PORT |= (1 << LCD_D5_BIT);
+	LCD_D4_PORT &= ~(1 << LCD_D4_BIT);
+	if (c & 1 << 7)
+		LCD_D4_PORT |= (1 << LCD_D4_BIT);
 	LCDEnableHigh();
 	_delay_us(1);
 	LCDEnableLow();
 	_delay_us(1);
 }
 
-void LCDWriteInstruction(uint8_t c)
+void LCDWriteInstruction(char c)
 {
 	LCDInstructionInput();
 	LCDEnableLow();
@@ -65,7 +73,7 @@ void LCDDataInput()
 	LCD_RS_PORT |= (1 << LCD_RS_BIT);
 }
 
-void LCDWriteChar(uint8_t c)
+void LCDWriteChar(char c)
 {
 	LCDDataInput();
 	LCDEnableLow();
@@ -73,11 +81,13 @@ void LCDWriteChar(uint8_t c)
 	LCDWriteNibble(c << 4);
 }
 
-void LCDWriteString(uint8_t *c)
+void LCDWriteString(char c[])
 {
-	while (*c != 0)
+	volatile int i = 0;
+	while (c[i] != 0)
 	{
-		LCDWriteChar(*c++);
+		LCDWriteChar(c[i]);
+		i++;
 		_delay_us(80);
 	}
 }

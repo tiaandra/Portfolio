@@ -46,11 +46,11 @@
 #define LCD_EN_BIT PORTC5
 
 void LCDInit();
-void LCDWriteNibble(uint8_t c);
-void LCDWriteInstruction(uint8_t c);
+void LCDWriteNibble(char c);
+void LCDWriteInstruction(char c);
 void LCDEnableLow();
 void LCDEnableHigh();
 void LCDInstructionInput();
 void LCDDataInput();
-void LCDWriteChar(uint8_t c);
-void LCDWriteString(uint8_t *c);
+void LCDWriteChar(char c);
+void LCDWriteString(char *c);
