@@ -1,13 +1,5 @@
 #include "ds18b20.h"
 
-/*
-1st step - Read Rom - returns the 64-bit ROM code, can be used because there is only 1 slave
-2nd step - Read Power Supply - followed by a read time slot to determine inactive state
-3rd step - Match Rom/Skip Rom - either works, match rom has to be followed by the 64-bit ROM code, skip rom will address all (in this case, the one i'm using)
-4th step - Convert T - converts temperature into the scratchpad
-5th step - Read Scratchpad -
-*/
-
 uint8_t DS18B20_Reset()
 {
     uint8_t i;
