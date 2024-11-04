@@ -67,6 +67,30 @@ uint8_t DS18B20_WriteByte(uint8_t byte)
     }
 }
 
+void DS18B20_ReadTemp(char *temp)
+{
+    uint8_t temperature[2];
+    int8_t digit;
+    uint16_t decimal;
+
+    DS18B20_Reset();
+    DS18B20_WriteByte(DS18B20_SkipRom);
+    DS18B20_WriteByte(DS18B20_ConvertT);
+    while (!DS18B20_ReadBit())
+        ;
+    DS18B20_Reset();
+    DS18B20_WriteByte(DS18B20_SkipRom);
+    DS18B20_ReadByte(DS18B20_Read);
+    temperature[0] = DS18B20_ReadByte();
+    temperature[1] = DS18B20_ReadByte();
+    DS18B20_Reset();
+    digit = temperature[0] >> 4;
+    digit |= (temperature[1] & 0x7) << 4;
+    decimal = temperature[0] & 0xf;
+    decimal *= 625;
+    sprintf(temp, "%+d.%04u C", digit, decimal);
+}
+
 /*
 https://www.analog.com/media/en/technical-documentation/data-sheets/DS18B20.pdf
 https://teslabs.com/openplayer/docs/docs/other/ds18b20_pre1.pdf

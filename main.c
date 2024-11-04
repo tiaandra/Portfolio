@@ -7,9 +7,11 @@ void MicroInit();
 int main()
 {
     MicroInit();
-    LCDWriteString("Tiago");
+    char *temperatura;
+    DS18B20_ReadTemp(temperatura);
+    LCDWriteString("Temperatura");
     LCDWriteInstruction(LCDSecondLine);
-    LCDWriteString("Andrade");
+    LCDWriteString(temperatura);
     while (1)
     {
     }

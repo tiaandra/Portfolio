@@ -22,3 +22,10 @@
 #define DS18B20_ReadMode DS18B20_DDR |= (1 << DS18B20_PIN)
 #define DS18B20_Low DS18B20_DDR &= ~(1 << DS18B20_PIN)
 #define DS18B20_High DS18B20_DDR |= (1 << DS18B20_PIN)
+
+uint8_t DS18B20_Reset();
+void DS18B20_WriteBit(uint8_t bit);
+uint8_t DS18B20_ReadBit();
+uint8_t DS18B20_ReadByte();
+uint8_t DS18B20_WriteByte(uint8_t byte);
+void DS18B20_ReadTemp(char *temp);
