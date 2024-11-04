@@ -1,4 +1,7 @@
+#define F_CPU 8000000UL
 #include <util/delay.h>
+#include <avr/io.h>
+#include <stdio.h>
 
 #define DS18B20_SearchRom 0xf0
 #define DS18B20_ReadRom 0x33
@@ -16,7 +19,12 @@
 #define DS18B20_DDR DDRC
 #define DS18B20_PORT PORTC
 #define DS18B20_PIN PINC6
-#define DS18B20_P PC6
+#define DS18B20_BIT PORTC6
+
+#define DS18B20_WriteMode DS18B20_DDR &= ~(1 << DS18B20_BIT)
+#define DS18B20_ReadMode DS18B20_DDR |= (1 << DS18B20_BIT)
+#define DS18B20_Low DS18B20_DDR &= ~(1 << DS18B20_BIT)
+#define DS18B20_High DS18B20_DDR |= (1 << DS18B20_BIT)
 
 void DS18B20_WriteMode();
 void DS18B20_ReadMode();

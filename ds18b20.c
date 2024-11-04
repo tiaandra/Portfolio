@@ -1,25 +1,5 @@
 #include "ds18b20.h"
 
-void DS18B20_WriteMode()
-{
-    DS18B20_DDR &= ~(1 << DS18B20_PIN);
-}
-
-void DS18B20_ReadMode()
-{
-    DS18B20_DDR |= (1 << DS18B20_PIN);
-}
-
-void DS18B20_Low()
-{
-    DS18B20_DDR &= ~(1 << DS18B20_PIN);
-}
-
-void DS18B20_High()
-{
-    DS18B20_DDR |= (1 << DS18B20_PIN);
-}
-
 uint8_t DS18B20_Reset()
 {
     uint8_t i;
@@ -28,7 +8,7 @@ uint8_t DS18B20_Reset()
     _delay_us(480);
     DS18B20_ReadMode();
     _delay_us(60);
-    i = (DS18B20_PIN & (1 << DS18B20_P));
+    i = (DS18B20_PIN & (1 << DS18B20_BIT));
     _delay_us(420);
     return i; // If 0 ok, if 1 bad
 }
@@ -52,7 +32,7 @@ uint8_t DS18B20_ReadBit()
     _delay_us(1);
     DS18B20_ReadMode;
     _delay_us(14);
-    if (DS18B20_PIN & (1 << DS18B20_P))
+    if (DS18B20_PIN & (1 << DS18B20_BIT))
         bit = 1;
     _delay_us(45);
     return bit;

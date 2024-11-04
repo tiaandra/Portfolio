@@ -1,6 +1,7 @@
 #define F_CPU 8000000UL
 #include <avr/io.h>
 #include "lcd1602a.h"
+#include "ds18b20.h"
 
 void MicroInit();
 
