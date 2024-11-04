@@ -15,14 +15,13 @@
 
 #define DS18B20_DDR DDRC
 #define DS18B20_PORT PORTC
-#define DS18B20_PIN PINC5
-#define DS18B20_P PC5
+#define DS18B20_PIN PINC6
+#define DS18B20_P PC6
 
-#define DS18B20_WriteMode DS18B20_DDR &= ~(1 << DS18B20_PIN)
-#define DS18B20_ReadMode DS18B20_DDR |= (1 << DS18B20_PIN)
-#define DS18B20_Low DS18B20_DDR &= ~(1 << DS18B20_PIN)
-#define DS18B20_High DS18B20_DDR |= (1 << DS18B20_PIN)
-
+void DS18B20_WriteMode();
+void DS18B20_ReadMode();
+void DS18B20_Low();
+void DS18B20_High();
 uint8_t DS18B20_Reset();
 void DS18B20_WriteBit(uint8_t bit);
 uint8_t DS18B20_ReadBit();

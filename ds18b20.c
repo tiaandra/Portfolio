@@ -1,5 +1,25 @@
 #include "ds18b20.h"
 
+void DS18B20_WriteMode()
+{
+    DS18B20_DDR &= ~(1 << DS18B20_PIN);
+}
+
+void DS18B20_ReadMode()
+{
+    DS18B20_DDR |= (1 << DS18B20_PIN);
+}
+
+void DS18B20_Low()
+{
+    DS18B20_DDR &= ~(1 << DS18B20_PIN);
+}
+
+void DS18B20_High()
+{
+    DS18B20_DDR |= (1 << DS18B20_PIN);
+}
+
 uint8_t DS18B20_Reset()
 {
     uint8_t i;
