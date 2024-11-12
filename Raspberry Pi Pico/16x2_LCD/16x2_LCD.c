@@ -4,21 +4,12 @@
 
 void IO_Init()
 {
+    uint32_t gpio_bitmask = (1 << RS) | (1 << EN) | (1 << D4) | (1 << D5) | (1 << D6) | (1 << D7);
     // Initialise the GPIOs for the LCD
-    gpio_init(RS);
-    gpio_init(EN);
-    gpio_init(D4);
-    gpio_init(D5);
-    gpio_init(D6);
-    gpio_init(D7);
+    gpio_init_mask(gpio_bitmask);
 
     // Set GPIOs direction (all as output by default)
-    gpio_set_dir(RS, true);
-    gpio_set_dir(EN, true);
-    gpio_set_dir(D4, true);
-    gpio_set_dir(D5, true);
-    gpio_set_dir(D6, true);
-    gpio_set_dir(D7, true);
+    gpio_set_dir_out_masked(gpio_bitmask);
 }
 
 int main()
