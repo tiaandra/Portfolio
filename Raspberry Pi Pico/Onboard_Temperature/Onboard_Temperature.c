@@ -42,4 +42,5 @@ int main()
         LCD_WriteString(temperature);
         sleep_ms(1000);
     }
+    return 0;
 }
