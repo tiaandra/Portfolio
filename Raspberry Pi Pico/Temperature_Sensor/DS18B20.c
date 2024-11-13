@@ -90,7 +90,7 @@ float DS18B20_GetTemperature()
         ;
     DS18B20_Reset();
     DS18B20_WriteByte(DS18B20_SkipRom);
-    sleep_ms(100); // Max conversion time on 9 bits, change if using diferent resolution
+    sleep_ms(750); // Max conversion time on 12 bits (defualt value)
     DS18B20_WriteByte(DS18B20_ReadScratchpad);
     unsigned char LSB = DS18B20_ReadByte();
     unsigned char MSB = DS18B20_ReadByte();
